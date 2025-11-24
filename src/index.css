@@ -1,16 +1,14 @@
-*{
+* {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-
-:root{
-  --primary-color: #ADD8E6;
-  --priary-font:"Roboto", sans-serif;
+:root {
+  --primary-color: #add8e6;
+  --priary-font: "Roboto", sans-serif;
 }
 
-body{
-  
-  background-color: #ADD8E6;
+body {
+  background-color: #add8e6;
 }
