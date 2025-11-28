@@ -15,56 +15,54 @@ function Homepage() {
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [todos, setTodos] = useState([])
-  const API_URl = "http://localhost:3000"
-  useEffect(()=>{
-    handleFetchTodo()
-  },[todos])
+  const [todos, setTodos] = useState([]);
+  const API_URl = "http://localhost:3000";
+  useEffect(() => {
+    handleFetchTodo();
+  }, [todos]);
 
   async function handleFetchTodo() {
-    const fetchedItems =  await axios.get(`${API_URl}/fetch`)
-    const todos = fetchedItems.data.foundTodo
-    setTodos(todos)
-    
+    const fetchedItems = await axios.get(`${API_URl}/fetch`);
+    const todos = fetchedItems.data.foundTodo;
+    setTodos(todos);
   }
 
- 
   async function handleAddTodo(params) {
-    setSuccess("")
+    setSuccess("");
     setError("");
     if (!title || !content) {
       setError("All fileds are recquired !!!");
       return;
     } else {
-      try{
-  const response = await axios.post(`${API_URl}/create`, {title, content})
-  if(response.status === 201){
-    setSuccess("The todo was updated succesfully")
-  }
-      }catch(e){
-    setError("Mhhhh something went wrong try again")
+      try {
+        const response = await axios.post(`${API_URl}/create`, {
+          title,
+          content,
+        });
+        if (response.status === 201) {
+          setSuccess("The todo was updated succesfully");
+        }
+      } catch (e) {
+        setError("Mhhhh something went wrong try again");
       }
-    
-      
     }
 
-    handleFetchTodo()
+    handleFetchTodo();
   }
-
 
   async function handleComplete(id) {
-    if(id ===null){
-      alert("please click again")
-      return
+    if (id === null) {
+      alert("please click again");
+      return;
     }
     const updated = await axios.patch(`${API_URl}/markcomplete/${id}`);
-    await handleFetchTodo()
+    await handleFetchTodo();
   }
 
-
   async function handleDelete(id) {
-   await axios.patch(`${API_URl}/delete/${id}`)
-   handleFetchTodo()
+    console.log(id);
+    await axios.patch(`${API_URl}/delete/${id}`);
+    handleFetchTodo();
   }
 
   return (
@@ -119,36 +117,51 @@ function Homepage() {
         ></TextField>
 
         <ButtonGroup fullWidth sx={{ display: "flex" }}>
-          <Button
-            variant="contained"
-            onClick={handleAddTodo}
-          >
+          <Button variant="contained" onClick={handleAddTodo}>
             Add Todo
           </Button>
-
         </ButtonGroup>
       </Card>
 
       {/*  Displaying Todos*/}
-     {todos &&  todos.map((todo)=>{
-        return(
-          
-          <Card sx={{display:"flex", flexDirection:"column", gap:"4px", padding:"3px",width:"25rem", minHeight:"10rem", justifyContent:"center", alignItems:"center"}} key={todo.id}>
-           <Typography>{todo.title}</Typography>
-           <Typography>{todo.excerpt}</Typography>
-           <ButtonGroup fullWidth sx={{marginTop:"4px"}}>
-          <Button onClick={()=>{handleComplete(todo.id)}}>{todo.isComplete ? "Completed" : " Mark As Complete"}</Button>
-          <Button sx={{ bgcolor: "red", color: "white", padding: ".5rem" }} onClick={()=>{handleDelete(todo.id)}}>
-            Delete Todo
-          </Button>
-           </ButtonGroup>
-      </Card>
-          
-        )
-     })
-}
-
-
+      {todos &&
+        todos.map((todo) => {
+          return (
+            <Card
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+                padding: "3px",
+                width: "25rem",
+                minHeight: "10rem",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              key={todo.id}
+            >
+              <Typography>{todo.title}</Typography>
+              <Typography>{todo.excerpt}</Typography>
+              <ButtonGroup fullWidth sx={{ marginTop: "4px" }}>
+                <Button
+                  onClick={() => {
+                    handleComplete(todo.id);
+                  }}
+                >
+                  {todo.isComplete ? "Completed" : " Mark As Complete"}
+                </Button>
+                <Button
+                  sx={{ bgcolor: "red", color: "white", padding: ".5rem" }}
+                  onClick={() => {
+                    handleDelete(todo.id);
+                  }}
+                >
+                  Delete Todo
+                </Button>
+              </ButtonGroup>
+            </Card>
+          );
+        })}
     </Box>
   );
 }
