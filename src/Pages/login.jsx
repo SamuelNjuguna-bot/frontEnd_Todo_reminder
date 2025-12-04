@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { toast, ToastContainer} from "react-toastify"
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
-
+import { useCookies} from "react-cookie"
 const API_URl = "http://localhost:3000";
 
 
@@ -11,7 +11,7 @@ function Login() {
     const navigate = useNavigate("")
     const [identifier, setIndetifier] = useState("")
     const [password, setPassword] = useState("")
-
+  const [cookie, setCookie] = useCookies(['login'])
     async function handleSignIn() {
         if(!identifier || !password){
 
@@ -21,7 +21,8 @@ function Login() {
         else{
             const signIn = await axios.post(`${API_URl}/login`,{password, identifier})
             const data = signIn.data
-            if(data){
+            setCookie("login", data.token)
+              if(data){
               navigate('/')
             }
         }

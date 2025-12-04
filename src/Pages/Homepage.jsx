@@ -17,9 +17,9 @@ function Homepage() {
   const [success, setSuccess] = useState("");
   const [todos, setTodos] = useState([]);
   const API_URl = "http://localhost:3000";
-  useEffect(() => {
-    handleFetchTodo();
-  }, [todos]);
+  // useEffect(() => {
+  //   handleFetchTodo();
+  // }, [todos]);
 
   async function handleFetchTodo() {
     const fetchedItems = await axios.get(`${API_URl}/fetch`);
@@ -38,7 +38,7 @@ function Homepage() {
         const response = await axios.post(`${API_URl}/create`, {
           title,
           content,
-        });
+        }, {withCredentials:true});
         if (response.status === 201) {
           setSuccess("The todo was updated succesfully");
         }
